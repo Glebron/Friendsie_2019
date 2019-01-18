@@ -26,7 +26,7 @@ var del = require('del')
     };
 
     function wp(cb){
-        webpack(require('./webpack.config.js'), function(err,stats){
+        webpack(require('./configs/webpack.config.js'), function(err,stats){
                     if (err){
                         console.log(err.toString());
                     }
