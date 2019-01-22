@@ -59,8 +59,8 @@ function clean(){
 function watch(){
     browserSync.init({
         injectChanges: true,
-        proxy: "http://localhost/"
-        //        server: {  baseDir: "./build" }
+        //proxy: "http://localhost/"
+        server: {  baseDir: "./build" }
     });
     gulp.watch("./dev/css/**/*.css", styles)
     gulp.watch("./dev/js/**/*.js", wp).on('change', browserSync.reload)
