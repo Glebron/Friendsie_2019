@@ -1,33 +1,17 @@
-function request(adress, request, func){
-    var required = new XMLHttpRequest();  
-
-               required.open("POST", "\""+adress+"?"+request, true);
-               required.send();
-               required.onreadystatechange = function() {
-                if (this.readyState === 4 && this.status === 200) {
-                 func();
-    
-                }
-        
-            };
-};
-
-
-
 const php= {
-    login: function(){
-        let login ="hi"
-        let psw = "123"
-        let request="name="+login+"&psw="+psw;
-        function test(){
-        console.log(required.responseText);
-            };
-        adress="./login_php.php"
-        request(adress, request, test);
-
-                    
-
+    msgSend: function(msg, recipient ,frome, type){
+        console.log("Start");
+        var required = new XMLHttpRequest();
+        required.open("POST", "./msg.php?msg="+msg+"&recipient="+recipient+"&frome="+frome+"&type="+type, true);
+        required.send();    
+        required.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log("End");
+              document.getElementById("error").innerHTML = this.responseText;
+            }
+        };
     },
+
     login2: function(){
 
     },

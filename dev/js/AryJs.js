@@ -3,6 +3,7 @@ const AryLyb = {
         let object= document.getElementById(id);
         object.innerHTML = htmlObject;
       },
+      
       arrayToHtml: function(arr) {
         var i=0;
         let htmlCode="";

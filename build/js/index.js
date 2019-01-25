@@ -135,7 +135,7 @@ const arrayOfFriends = [{
 
 function showFriends() {
   let htmlCode = _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].arrayToHtml(arrayOfFriends.map(element => `<li>
-            <div id=${element.id} class='friend_profile'>
+            <div id=${element.id} name =${element.name} class='friend_profile'>
             <div><img class='profilePicture' src='${element.icon}'</div>
             <div>${element.name}<br></div>
             </div>
@@ -143,9 +143,8 @@ function showFriends() {
   _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("root", htmlCode);
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(function () {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('.friend_profile').click(function () {
-      var id = this.attributes.id.value;
-      console.log(id);
-      _actions_messageSending_js__WEBPACK_IMPORTED_MODULE_2__["default"].showMessageForm(arrayOfQuestions, id);
+      var login = this.attributes.name.value;
+      _actions_messageSending_js__WEBPACK_IMPORTED_MODULE_2__["default"].showMessageForm(arrayOfQuestions, login);
     });
   });
 }
@@ -10575,24 +10574,38 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const messages = {
-  showMessageForm: function (arr, id) {
+  showMessageForm: function (arr, login) {
     let questionTypeHtml = _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].arrayToHtml(arr.map(element => `<option value="${element.name}">${element.name}</option>`));
     let html = `<div class="form-popup" id="myForm">
-          <label for="mss"><b>Message</b></label>
-          <input type="text" placeholder="Your question" name="email" required>      
+          
+        <label for="mss"><b>Message</b></label>
+          <input id="msg" type="text" placeholder="Your question" name="email">      
           <label for="questionType"><b>Question type</b></label>
-        <select name="questionType">
+        <select id="type" name="questionType">
            ${questionTypeHtml}
         </select>       
           <button type="submit" class="btn">Send question</button>
           <button type="button" class="btncancel">Close</button>        
       </div>`;
     _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].showhtml("form", html);
-    document.querySelector('.btn').addEventListener('click', _php_js__WEBPACK_IMPORTED_MODULE_1__["default"].login);
+    document.querySelector('.btn').addEventListener('click', this.check_input(login), false);
     document.querySelector('.btncancel').addEventListener('click', this.closeForm);
   },
   closeForm: function () {
     _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].showhtml("form", null);
+  },
+  check_input: function (login) {
+    const msg = document.getElementById("msg").value;
+    const recipient = login;
+    const frome = "Aryna";
+    const type = document.getElementById("type").value;
+    console.log(login);
+
+    if (msg === "" || type === "") {
+      _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].showhtml("form", "Error");
+    } else {
+      _php_js__WEBPACK_IMPORTED_MODULE_1__["default"].msgSend(msg, recipient, frome, type);
+    }
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (messages);
@@ -10603,32 +10616,19 @@ const messages = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function request(adress, request, func) {
-  var required = new XMLHttpRequest();
-  required.open("POST", "\"" + adress + "?" + request, true);
-  required.send();
-
-  required.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-      func();
-    }
-  };
-}
-
-;
 const php = {
-  login: function () {
-    let login = "hi";
-    let psw = "123";
-    let request = "name=" + login + "&psw=" + psw;
+  msgSend: function (msg, recipient, frome, type) {
+    console.log("Start");
+    var required = new XMLHttpRequest();
+    required.open("POST", "./msg.php?msg=" + msg + "&recipient=" + recipient + "&frome=" + frome + "&type=" + type, true);
+    required.send();
 
-    function test() {
-      console.log(required.responseText);
-    }
-
-    ;
-    adress = "./login_php.php";
-    request(adress, request, test);
+    required.onreadystatechange = function () {
+      if (this.readyState === 4 && this.status === 200) {
+        console.log("End");
+        document.getElementById("error").innerHTML = this.responseText;
+      }
+    };
   },
   login2: function () {},
   login3: function () {},

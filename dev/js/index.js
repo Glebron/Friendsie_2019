@@ -29,7 +29,7 @@ const arrayOfFriends=[
 function showFriends(){
     let htmlCode=Ar.arrayToHtml(arrayOfFriends.map((element)=>
     `<li>
-            <div id=${element.id} class='friend_profile'>
+            <div id=${element.id} name =${element.name} class='friend_profile'>
             <div><img class='profilePicture' src='${element.icon}'</div>
             <div>${element.name}<br></div>
             </div>
@@ -38,10 +38,9 @@ function showFriends(){
     Ar.showhtml("root", htmlCode);
 
     $(document).ready(function(){ $('.friend_profile').click(function(){
-           var id= this.attributes.id.value;
+           var login= this.attributes.name.value;
         
-        console.log(id); 
-    MSS.showMessageForm(arrayOfQuestions, id);
+    MSS.showMessageForm(arrayOfQuestions, login);
         });
     });
 
