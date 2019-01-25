@@ -8,13 +8,14 @@
 !/build/**/*
 !./webpack.config.js
 !./.babelrc
+.gulpfile.js
 
 # testing
 /coverage
 
 # production
 /build
-gulpfile.js
+
 # misc
 .DS_Store
 .env.local
