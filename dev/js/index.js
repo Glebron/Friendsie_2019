@@ -51,7 +51,7 @@ function showFriends(){
 
 function showQuestions(){
     let htmlCode=Ar.arrayToHtml(arrayOfQuestions.map((element)=>
-    `<li class="single_question_type" style="--my-color-var: ${element.color};"><p>${element.name}</p><i class="fas fa-angle-right"></i></li>`
+    `<li class="single_question_type" style="--my-color-var: ${element.color};"><p>${element.name}</p><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg></li>`
     ));
     Ar.showhtml("root", htmlCode);
 }
