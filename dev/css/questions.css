@@ -1,0 +1,38 @@
+.question_types{
+    padding: 0px;
+    margin: 0px;
+    list-style: none; 
+}
+
+.single_question_type{
+margin: 0px 5% 0px 5%;
+padding: 50px;
+height:50px;
+padding: 0px;
+font-size: 40px;
+font-family: 'Gochi Hand', cursive;
+    display: flex;    
+    align-items: center;
+    border-bottom: 3px dashed;
+}
+.single_question_type p{
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.single_question_type i{
+    font-size: 50px;
+    display: block;
+    padding-right: 25px;
+    margin-left: auto;
+}
+.single_question_type::before{
+    content: "\2022";
+    color:var(--my-color-var);
+    font-weight: bold;
+    font-size: 60px;
+    padding: 0 20px 0 0px;
+     font-family: initial;
+}

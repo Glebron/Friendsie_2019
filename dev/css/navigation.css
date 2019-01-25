@@ -1,0 +1,17 @@
+.menu{
+    display: grid;
+    width: 100%;
+    background-color: cadetblue;
+}
+.menu {
+    li{display: inline-block;
+        list-style-type: none;
+        margin: 1px;
+        padding: 2px;
+        float: right;}
+    
+}
+.menu li a{
+    text-align: center;
+   
+}
