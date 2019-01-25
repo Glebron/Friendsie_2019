@@ -8,7 +8,7 @@
 !/build/**/*
 !./webpack.config.js
 !./.babelrc
-.gulpfile.js
+gulpfile.js
 
 # testing
 /coverage

@@ -4,7 +4,7 @@ import php from './php.js';
 
 
 const messages = {
-    showMessageForm: function(arr, login){
+    showMessageForm: function(arr, login, friend_login){
         let questionTypeHtml = Ar.arrayToHtml(arr.map((element)=>
         `<option value="${element.name}">${element.name}</option>`));
 
@@ -18,28 +18,33 @@ const messages = {
            ${questionTypeHtml}
         </select>       
           <button type="submit" class="btn">Send question</button>
-          <button type="button" class="btncancel">Close</button>        
+          <button type="button" class="btncancel">Close</button> 
+          <div id="error"></div>       
       </div>`; 
 
       Ar.showhtml("form", html);
       
-     document.querySelector('.btn').addEventListener('click', this.check_input(login), false);
+     document.querySelector('.btn').addEventListener("click", ()=> {
+        this.check_input(login, friend_login);
+        
+    });     
+    
      document.querySelector('.btncancel').addEventListener('click', this.closeForm);
     },
     closeForm: function(){
         Ar.showhtml("form", null); },
     
-    check_input: function(login){
+    check_input: function(login, friend_login){
             const msg = document.getElementById("msg").value;
-            const recipient = login;
-            const frome = "Aryna";
+            const recipient = friend_login;
+            const frome = login;
             const type = document.getElementById("type").value;
-            console.log(login);
-            if (msg === "" ||  type === ""){
-                Ar.showhtml("form", "Error");
+            if (msg === "" ){
+                Ar.showhtml("error", "Error");
                 }
                 else{
                     php.msgSend(msg, recipient ,frome, type);
+                    this.closeForm();
                     }
     
         }

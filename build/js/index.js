@@ -94,12 +94,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _AryJs_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 /* harmony import */ var _actions_messageSending_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
+/* harmony import */ var _actions_php_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
+
 
 
 
 var button = document.querySelector('.kaverit').addEventListener('click', showFriends);
-var button = document.querySelector('.kysy').addEventListener('click', showQuestions);
 var button = document.querySelector('.viestit').addEventListener('click', showMessages);
+var button = document.querySelector('.kysy').addEventListener('click', showQuestions);
+const login = "Arynator";
 const arrayOfQuestions = [{
   name: "Oma",
   color: "rgb(255, 0, 106)"
@@ -143,8 +146,8 @@ function showFriends() {
   _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("root", htmlCode);
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(function () {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('.friend_profile').click(function () {
-      var login = this.attributes.name.value;
-      _actions_messageSending_js__WEBPACK_IMPORTED_MODULE_2__["default"].showMessageForm(arrayOfQuestions, login);
+      var friend_login = this.attributes.name.value;
+      _actions_messageSending_js__WEBPACK_IMPORTED_MODULE_2__["default"].showMessageForm(arrayOfQuestions, login, friend_login);
     });
   });
 }
@@ -156,14 +159,17 @@ function showQuestions() {
   _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("root", htmlCode);
 }
 
+;
+
 function showMessages() {
-  let htmlCode = _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].arrayToHtml(arrayOfQuestions.map(element => `<li class="single_question_type" style="--my-color-var: ${element.color};"><p>${element.name}</p><i class="fas fa-angle-right"></i></li>`));
-  _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("root", htmlCode);
+  //let htmlCode=Ar.arrayToHtml(arrayOfQuestions.map((element)=>
+  // `<li class="single_question_type" style="--my-color-var: ${element.color};"><p>${element.name}</p><i class="fas fa-angle-right"></i></li>`
+  //));
+  // Ar.showhtml("root", htmlCode);
+  _actions_php_js__WEBPACK_IMPORTED_MODULE_3__["default"].receve_msg(login);
 }
 
-function closeForm() {
-  _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("form", null);
-}
+;
 
 /***/ }),
 /* 1 */
@@ -10574,7 +10580,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const messages = {
-  showMessageForm: function (arr, login) {
+  showMessageForm: function (arr, login, friend_login) {
     let questionTypeHtml = _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].arrayToHtml(arr.map(element => `<option value="${element.name}">${element.name}</option>`));
     let html = `<div class="form-popup" id="myForm">
           
@@ -10585,26 +10591,29 @@ const messages = {
            ${questionTypeHtml}
         </select>       
           <button type="submit" class="btn">Send question</button>
-          <button type="button" class="btncancel">Close</button>        
+          <button type="button" class="btncancel">Close</button> 
+          <div id="error"></div>       
       </div>`;
     _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].showhtml("form", html);
-    document.querySelector('.btn').addEventListener('click', this.check_input(login), false);
+    document.querySelector('.btn').addEventListener("click", () => {
+      this.check_input(login, friend_login);
+    });
     document.querySelector('.btncancel').addEventListener('click', this.closeForm);
   },
   closeForm: function () {
     _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].showhtml("form", null);
   },
-  check_input: function (login) {
+  check_input: function (login, friend_login) {
     const msg = document.getElementById("msg").value;
-    const recipient = login;
-    const frome = "Aryna";
+    const recipient = friend_login;
+    const frome = login;
     const type = document.getElementById("type").value;
-    console.log(login);
 
-    if (msg === "" || type === "") {
-      _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].showhtml("form", "Error");
+    if (msg === "") {
+      _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].showhtml("error", "Error");
     } else {
       _php_js__WEBPACK_IMPORTED_MODULE_1__["default"].msgSend(msg, recipient, frome, type);
+      this.closeForm();
     }
   }
 };
@@ -10616,21 +10625,35 @@ const messages = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AryJs_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+
 const php = {
   msgSend: function (msg, recipient, frome, type) {
     console.log("Start");
     var required = new XMLHttpRequest();
-    required.open("POST", "./msg.php?msg=" + msg + "&recipient=" + recipient + "&frome=" + frome + "&type=" + type, true);
+    required.open("POST", "./js/actions/msg.php?msg=" + msg + "&recipient=" + recipient + "&frome=" + frome + "&type=" + type, true);
     required.send();
 
     required.onreadystatechange = function () {
       if (this.readyState === 4 && this.status === 200) {
-        console.log("End");
-        document.getElementById("error").innerHTML = this.responseText;
+        console.log(this.responseText); //return this.responseText;
       }
     };
   },
-  login2: function () {},
+  receve_msg: function (recipient) {
+    var required = new XMLHttpRequest();
+    required.open("POST", "./js/actions/msgcheck.php?recipient=" + recipient, true);
+    required.send();
+
+    required.onreadystatechange = function () {
+      if (this.readyState === 4 && this.status === 200) {
+        var res = JSON.parse(this.responseText);
+        console.log(res);
+        let htmlCode = _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].arrayToHtml(res.map(element => `<li class="single_question_type" style="--my-color-var: ${element.id};"><p>${element.msg} frome ${element.frome}</p></li>`));
+        _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].showhtml("root", htmlCode); //document.getElementById("root").innerHTML = this.responseText;
+      }
+    };
+  },
   login3: function () {},
   login4: function () {}
 };

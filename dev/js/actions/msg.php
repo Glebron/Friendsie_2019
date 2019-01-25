@@ -33,7 +33,7 @@ $type = mysqli_real_escape_string($conn, $type);
 
 
 
-    $sql = "INSERT INTO msg (msg, recipient, frome, type) VALUES ('$msg','$recipient', '$frome' , $type)";
+    $sql = "INSERT INTO msg (msg, recipient, frome, type) VALUES ('$msg','$recipient', '$frome' , '$type')";
     if ($conn->query($sql) === TRUE) {
         echo "New record created successfully";
     } else {
