@@ -14,8 +14,7 @@ var uglify = require('gulp-uglify')
 var del = require('del')
 
    const cssFiless = [
-        './dev/css/style.css',
-        './dev/css/style2.css'];
+        './dev/css/style.css'];
  function styles(){
   return gulp.src(cssFiless)
     .pipe(concat('styles.css'))
@@ -59,8 +58,8 @@ function clean(){
 function watch(){
     browserSync.init({
         injectChanges: true,
-        //proxy: "http://localhost/"
-        server: {  baseDir: "./build" }
+        proxy: "http://localhost/"
+        //server: {  baseDir: "./build" }
     });
     gulp.watch("./dev/css/**/*.css", styles)
     gulp.watch("./dev/js/**/*.js", wp).on('change', browserSync.reload)
