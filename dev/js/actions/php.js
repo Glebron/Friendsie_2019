@@ -30,14 +30,38 @@ const php= {
               //document.getElementById("root").innerHTML = this.responseText;
             }    
         };
+    },
+
+    login: function(login,psw,cFunction){
+      
+        console.log("Start");
+            var required = new XMLHttpRequest();           
+            required.open("POST", "./login_php.php?login="+login+"&psw="+psw, true);
+            required.send();
+            var user;
+            required.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                 console.log("Calback send")
+                 cFunction(this);                         
+                }
+             };
         
+    },
     
-    },
-    login3: function(){
+    checkCookie: function(cFunction){               
+        console.log("StartChekingggg");
+            var required = new XMLHttpRequest();
+            required.open("POST", "./login_php.php?cookie=test", true);
+            required.send();
+        required.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("Calback send")
+                    cFunction(this);                                                        
+                }               
+            };
 
-    },
-    login4: function(){
-
+            
+            
     }
 
 };

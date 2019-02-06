@@ -9,8 +9,7 @@ const messages = {
         `<option value="${element.name}">${element.name}</option>`));
 
         let html = 
-     `<div class="form-popup" id="myForm">
-          
+     `<div class="form-popup" id="myForm">          
         <label for="mss"><b>Message</b></label>
           <input id="msg" type="text" placeholder="Your question" name="email">      
           <label for="questionType"><b>Question type</b></label>

@@ -102,7 +102,31 @@ __webpack_require__.r(__webpack_exports__);
 var button = document.querySelector('.kaverit').addEventListener('click', showFriends);
 var button = document.querySelector('.viestit').addEventListener('click', showMessages);
 var button = document.querySelector('.kysy').addEventListener('click', showQuestions);
-const login = "Arynator";
+const login = "";
+
+function start() {
+  const logingForm = `<div class="enter"><p>Enter</p>
+    <input placeholder="Esim: otto.heikkinen@gmail.com" type="text" class="">
+    <p class="sala">Enter password</p>
+    <input placeholder="********" type="text" class=""> <br>
+    <button class="enter">Kirjaudu sisään</button>
+      </div>`;
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".menu").toggleClass("hidden");
+  _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("main_root", logingForm);
+
+  function test(required) {
+    login_chech = JSON.parse(required.responseText);
+    console.log(login_chech);
+  }
+
+  ;
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".enter").click(() => {
+    _actions_php_js__WEBPACK_IMPORTED_MODULE_3__["default"].checkCookie(test);
+  });
+}
+
+;
+start();
 const arrayOfQuestions = [{
   name: "Oma",
   color: "rgb(255, 0, 106)"
@@ -143,7 +167,7 @@ function showFriends() {
             <div>${element.name}<br></div>
             </div>
     </li>`));
-  _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("root", htmlCode);
+  _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("ul_root", htmlCode);
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(function () {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('.friend_profile').click(function () {
       var friend_login = this.attributes.name.value;
@@ -156,16 +180,12 @@ function showFriends() {
 
 function showQuestions() {
   let htmlCode = _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].arrayToHtml(arrayOfQuestions.map(element => `<li class="single_question_type" style="--my-color-var: ${element.color};"><p>${element.name}</p><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg></li>`));
-  _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("root", htmlCode);
+  _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("ul_root", htmlCode);
 }
 
 ;
 
 function showMessages() {
-  //let htmlCode=Ar.arrayToHtml(arrayOfQuestions.map((element)=>
-  // `<li class="single_question_type" style="--my-color-var: ${element.color};"><p>${element.name}</p><i class="fas fa-angle-right"></i></li>`
-  //));
-  // Ar.showhtml("root", htmlCode);
   _actions_php_js__WEBPACK_IMPORTED_MODULE_3__["default"].receve_msg(login);
 }
 
@@ -10582,8 +10602,7 @@ __webpack_require__.r(__webpack_exports__);
 const messages = {
   showMessageForm: function (arr, login, friend_login) {
     let questionTypeHtml = _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].arrayToHtml(arr.map(element => `<option value="${element.name}">${element.name}</option>`));
-    let html = `<div class="form-popup" id="myForm">
-          
+    let html = `<div class="form-popup" id="myForm">          
         <label for="mss"><b>Message</b></label>
           <input id="msg" type="text" placeholder="Your question" name="email">      
           <label for="questionType"><b>Question type</b></label>
@@ -10654,8 +10673,33 @@ const php = {
       }
     };
   },
-  login3: function () {},
-  login4: function () {}
+  login: function (login, psw, cFunction) {
+    console.log("Start");
+    var required = new XMLHttpRequest();
+    required.open("POST", "./login_php.php?login=" + login + "&psw=" + psw, true);
+    required.send();
+    var user;
+
+    required.onreadystatechange = function () {
+      if (this.readyState === 4 && this.status === 200) {
+        console.log("Calback send");
+        cFunction(this);
+      }
+    };
+  },
+  checkCookie: function (cFunction) {
+    console.log("StartChekingggg");
+    var required = new XMLHttpRequest();
+    required.open("POST", "./login_php.php?cookie=test", true);
+    required.send();
+
+    required.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log("Calback send");
+        cFunction(this);
+      }
+    };
+  }
 };
 /* harmony default export */ __webpack_exports__["default"] = (php);
 

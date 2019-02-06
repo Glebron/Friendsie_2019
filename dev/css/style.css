@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Gochi+Hand');
 @import "header.css";
 @import "questions.css";
+@import "log-in.css";
 
 body{
     padding: 0px;
@@ -23,6 +24,9 @@ body{
     background-color: floralwhite;
 }
 
+.hidden{
+    display: none;
+}
 
 
 
