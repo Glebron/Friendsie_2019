@@ -1,4 +1,4 @@
-import Ar from '../AryJs.js';
+//import Ar from '../AryJs.js';
 
 
 const php= {
@@ -36,13 +36,27 @@ const php= {
       
         console.log("Start");
             var required = new XMLHttpRequest();           
-            required.open("POST", "./login_php.php?login="+login+"&psw="+psw, true);
+            required.open("POST", "./js/actions/login/login_php.php?login="+login+"&psw="+psw, true);
             required.send();
-            var user;
             required.onreadystatechange = function() {
                 if (this.readyState === 4 && this.status === 200) {
-                 console.log("Calback send")
-                 cFunction(this);                         
+                 console.log("Calback send"); 
+                 cFunction(this.responseText);                         
+                }
+             };
+        
+    },
+
+    register: function(login,psw){
+      
+        console.log("Start");
+            var required = new XMLHttpRequest();           
+            required.open("POST", "./js/actions/login/register_php.php?login="+login+"&psw="+psw, true);
+            required.send();
+            required.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                 console.log("Created"); 
+                         
                 }
              };
         
@@ -51,12 +65,12 @@ const php= {
     checkCookie: function(cFunction){               
         console.log("StartChekingggg");
             var required = new XMLHttpRequest();
-            required.open("POST", "./login_php.php?cookie=test", true);
+            required.open("POST", "./js/actions/login/login_php.php?cookie=test", true);
             required.send();
-        required.onreadystatechange = function() {
+             required.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     console.log("Calback send")
-                    cFunction(this);                                                        
+                    cFunction(this.responseText);                                                        
                 }               
             };
 

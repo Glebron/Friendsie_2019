@@ -93,8 +93,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _AryJs_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _actions_messageSending_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
+/* harmony import */ var _actions_msg_messageSending_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
 /* harmony import */ var _actions_php_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
+/* harmony import */ var _actions_login_login_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
+
 
 
 
@@ -102,31 +104,16 @@ __webpack_require__.r(__webpack_exports__);
 var button = document.querySelector('.kaverit').addEventListener('click', showFriends);
 var button = document.querySelector('.viestit').addEventListener('click', showMessages);
 var button = document.querySelector('.kysy').addEventListener('click', showQuestions);
-const login = "";
+let user_name = "";
+_actions_login_login_js__WEBPACK_IMPORTED_MODULE_4__["default"].start(appStart);
 
-function start() {
-  const logingForm = `<div class="enter"><p>Enter</p>
-    <input placeholder="Esim: otto.heikkinen@gmail.com" type="text" class="">
-    <p class="sala">Enter password</p>
-    <input placeholder="********" type="text" class=""> <br>
-    <button class="enter">Kirjaudu sisään</button>
-      </div>`;
+function appStart(login) {
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(".menu").toggleClass("hidden");
-  _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("main_root", logingForm);
-
-  function test(required) {
-    login_chech = JSON.parse(required.responseText);
-    console.log(login_chech);
-  }
-
-  ;
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".enter").click(() => {
-    _actions_php_js__WEBPACK_IMPORTED_MODULE_3__["default"].checkCookie(test);
-  });
+  user_name = login;
+  console.log(user_name);
+  showFriends();
 }
 
-;
-start();
 const arrayOfQuestions = [{
   name: "Oma",
   color: "rgb(255, 0, 106)"
@@ -161,17 +148,17 @@ const arrayOfFriends = [{
 }];
 
 function showFriends() {
-  let htmlCode = _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].arrayToHtml(arrayOfFriends.map(element => `<li>
+  let htmlCode = '<ul id="ul_root" class="question_types">' + _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].arrayToHtml(arrayOfFriends.map(element => `<li>
             <div id=${element.id} name =${element.name} class='friend_profile'>
             <div><img class='profilePicture' src='${element.icon}'</div>
             <div>${element.name}<br></div>
             </div>
-    </li>`));
-  _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("ul_root", htmlCode);
+    </li>`)) + "</ul>";
+  _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("main_root", htmlCode);
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(function () {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('.friend_profile').click(function () {
       var friend_login = this.attributes.name.value;
-      _actions_messageSending_js__WEBPACK_IMPORTED_MODULE_2__["default"].showMessageForm(arrayOfQuestions, login, friend_login);
+      _actions_msg_messageSending_js__WEBPACK_IMPORTED_MODULE_2__["default"].showMessageForm(arrayOfQuestions, _actions_login_login_js__WEBPACK_IMPORTED_MODULE_4__["default"], friend_login);
     });
   });
 }
@@ -186,7 +173,7 @@ function showQuestions() {
 ;
 
 function showMessages() {
-  _actions_php_js__WEBPACK_IMPORTED_MODULE_3__["default"].receve_msg(login);
+  _actions_php_js__WEBPACK_IMPORTED_MODULE_3__["default"].receve_msg(user_name);
 }
 
 ;
@@ -10644,8 +10631,7 @@ const messages = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _AryJs_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-
+//import Ar from '../AryJs.js';
 const php = {
   msgSend: function (msg, recipient, frome, type) {
     console.log("Start");
@@ -10668,40 +10654,116 @@ const php = {
       if (this.readyState === 4 && this.status === 200) {
         var res = JSON.parse(this.responseText);
         console.log(res);
-        let htmlCode = _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].arrayToHtml(res.map(element => `<li class="single_question_type" style="--my-color-var: ${element.id};"><p>${element.msg} frome ${element.frome}</p></li>`));
-        _AryJs_js__WEBPACK_IMPORTED_MODULE_0__["default"].showhtml("root", htmlCode); //document.getElementById("root").innerHTML = this.responseText;
+        let htmlCode = Ar.arrayToHtml(res.map(element => `<li class="single_question_type" style="--my-color-var: ${element.id};"><p>${element.msg} frome ${element.frome}</p></li>`));
+        Ar.showhtml("root", htmlCode); //document.getElementById("root").innerHTML = this.responseText;
       }
     };
   },
   login: function (login, psw, cFunction) {
     console.log("Start");
     var required = new XMLHttpRequest();
-    required.open("POST", "./login_php.php?login=" + login + "&psw=" + psw, true);
+    required.open("POST", "./js/actions/login/login_php.php?login=" + login + "&psw=" + psw, true);
     required.send();
-    var user;
 
     required.onreadystatechange = function () {
       if (this.readyState === 4 && this.status === 200) {
         console.log("Calback send");
-        cFunction(this);
+        cFunction(this.responseText);
+      }
+    };
+  },
+  register: function (login, psw) {
+    console.log("Start");
+    var required = new XMLHttpRequest();
+    required.open("POST", "./js/actions/login/register_php.php?login=" + login + "&psw=" + psw, true);
+    required.send();
+
+    required.onreadystatechange = function () {
+      if (this.readyState === 4 && this.status === 200) {
+        console.log("Created");
       }
     };
   },
   checkCookie: function (cFunction) {
     console.log("StartChekingggg");
     var required = new XMLHttpRequest();
-    required.open("POST", "./login_php.php?cookie=test", true);
+    required.open("POST", "./js/actions/login/login_php.php?cookie=test", true);
     required.send();
 
     required.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
         console.log("Calback send");
-        cFunction(this);
+        cFunction(this.responseText);
       }
     };
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (php);
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _AryJs_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _php_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+
+
+
+const login = {
+  start: function (logedFunction) {
+    const logingForm = `<div class="enter"><p>Enter</p>
+        <input id="login" placeholder="Esim: otto.heikkinen@gmail.com" type="text" >
+        <p class="sala">Enter password</p>
+        <input id="psw" placeholder="********" type="text" > <br>
+        <button class="enter_btn">Kirjaudu sisään</button><div id="error"></div>
+          </div>`;
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".menu").toggleClass("hidden");
+    _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("main_root", logingForm);
+    _php_js__WEBPACK_IMPORTED_MODULE_2__["default"].checkCookie(loginTest);
+
+    function check_input() {
+      const login = document.getElementById("login").value;
+      const psw = document.getElementById("psw").value;
+
+      if (login === "" || psw === "") {
+        _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("error", "Check Input");
+      } else {
+        _php_js__WEBPACK_IMPORTED_MODULE_2__["default"].login(login, psw, loginTest);
+      }
+    }
+
+    ;
+
+    function loginTest(responce) {
+      const login_chech = JSON.parse(responce);
+      console.log(login_chech);
+
+      if (login_chech.error == true) {
+        if (login_chech.errorMessage == "Acces denied") {
+          _AryJs_js__WEBPACK_IMPORTED_MODULE_1__["default"].showhtml("error", login_chech.errorMessage);
+        } else if (login_chech.errorMessage == "no user") {
+          var isAdmin = confirm(`Создать нового пользователя ${login_chech.login}?`);
+
+          if (isAdmin == true) {
+            _php_js__WEBPACK_IMPORTED_MODULE_2__["default"].register(login_chech.login, login_chech.lvl);
+          }
+        }
+      } else {
+        logedFunction(login_chech.login);
+      }
+    }
+
+    ;
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".enter_btn").click(() => {
+      check_input();
+    });
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (login);
 
 /***/ })
 /******/ ]);

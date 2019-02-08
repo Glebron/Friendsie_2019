@@ -1,5 +1,5 @@
 <?php
-require 'conn.php';
+require '../conn.php';
 
 $cookie_name = "login";
 $returnObject = new \stdClass();
@@ -56,12 +56,10 @@ if ($login=="logOff" and $psw==""){
             $returnObject->login = $login;
             $myJSON = json_encode($returnObject);
             echo $myJSON;
-        }
-     
-        
+        }         
         else {
             $returnObject->error = true;
-            $returnObject->errorMessage=$row['psw'];
+            $returnObject->errorMessage="Acces denied";
             $myJSON = json_encode($returnObject);
             echo $myJSON;
  
@@ -69,7 +67,9 @@ if ($login=="logOff" and $psw==""){
     }
     else {
         $returnObject->error = true;
-        $returnObject->errorMessage="Acces denied2";
+        $returnObject->login = $login;
+        $returnObject->lvl= $psw;
+        $returnObject->errorMessage="no user";
         $myJSON = json_encode($returnObject);
         echo $myJSON;
     }

@@ -1,37 +1,25 @@
 import $ from 'jquery';
 import Ar from './AryJs.js';
-import MSS from './actions/messageSending.js';
+import MSS from './actions/msg/messageSending.js';
 import php from './actions/php.js';
+import login from './actions/login/login.js';
+
+
 
 var button = document.querySelector('.kaverit').addEventListener('click', showFriends);
 var button = document.querySelector('.viestit').addEventListener('click', showMessages);
 var button = document.querySelector('.kysy').addEventListener('click', showQuestions);
 
-const login ="";
+let user_name ="";
+login.start(appStart);
 
+function appStart(login){
+    $(".menu").toggleClass("hidden");
 
-
-function start(){
-    const logingForm= `<div class="enter"><p>Enter</p>
-    <input placeholder="Esim: otto.heikkinen@gmail.com" type="text" class="">
-    <p class="sala">Enter password</p>
-    <input placeholder="********" type="text" class=""> <br>
-    <button class="enter">Kirjaudu sisään</button>
-      </div>`;
-      
-      $(".menu").toggleClass("hidden");
-      Ar.showhtml("main_root", logingForm);
-    function test(required){
-        login_chech = JSON.parse(required.responseText);
-        console.log(login_chech)
-                };
-      $(".enter").click(()=>{
-        php.checkCookie(test)
-      });
-
-};
-
-start();
+    user_name= login;
+    console.log(user_name);
+    showFriends();
+}
 
 const arrayOfQuestions=[
     {name: "Oma", color: "rgb(255, 0, 106)"},
@@ -50,15 +38,15 @@ const arrayOfFriends=[
 
 
 function showFriends(){
-    let htmlCode=Ar.arrayToHtml(arrayOfFriends.map((element)=>
+    let htmlCode='<ul id="ul_root" class="question_types">'+Ar.arrayToHtml(arrayOfFriends.map((element)=>
     `<li>
             <div id=${element.id} name =${element.name} class='friend_profile'>
             <div><img class='profilePicture' src='${element.icon}'</div>
             <div>${element.name}<br></div>
             </div>
     </li>`
-    ));
-    Ar.showhtml("ul_root", htmlCode);
+    ))+"</ul>";
+    Ar.showhtml("main_root", htmlCode);
 
     $(document).ready(function(){ $('.friend_profile').click(function(){
            var friend_login= this.attributes.name.value;
@@ -74,7 +62,7 @@ function showQuestions(){
     Ar.showhtml("ul_root", htmlCode);
 };
 function showMessages(){
-   php.receve_msg(login);
+   php.receve_msg(user_name);
   
 
 };

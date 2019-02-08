@@ -1,5 +1,5 @@
-import Ar from '../AryJs.js';
-import php from './php.js';
+import Ar from '../../AryJs.js';
+import php from '../php.js';
 
 
 
